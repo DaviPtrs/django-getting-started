@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker-compose run web $@
+sudo chown -R $USER:$USER .
