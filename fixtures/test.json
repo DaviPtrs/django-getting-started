@@ -1,0 +1,45 @@
+[
+    {
+        "model":"polls.question",
+        "pk":1,
+        "fields":{
+            "question_text":"What's up?",
+            "pub_date":"2021-02-24T15:01:48Z"
+        }
+    },
+    {
+        "model":"polls.question",
+        "pk":2,
+        "fields":{
+            "question_text":"Can anybody find me somebody to love?",
+            "pub_date":"2021-02-25T11:47:18Z"
+        }
+    },
+    {
+        "model":"polls.choice",
+        "pk":1,
+        "fields":{
+            "question":1,
+            "choice_text":"Not much",
+            "votes":4
+        }
+    },
+    {
+        "model":"polls.choice",
+        "pk":2,
+        "fields":{
+            "question":1,
+            "choice_text":"The sky",
+            "votes":8
+        }
+    },
+    {
+        "model":"polls.choice",
+        "pk":3,
+        "fields":{
+            "question":2,
+            "choice_text":"No, you are not lovable",
+            "votes":0
+        }
+    }
+]
