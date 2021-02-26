@@ -21,6 +21,9 @@ down-v:
 down-all:
 	docker-compose down -v --rmi all
 
+build:
+	docker-compose build
+
 access:
 	docker-compose exec web bash
 
