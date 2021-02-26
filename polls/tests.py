@@ -110,6 +110,23 @@ class QuestionIndexViewTests(TestCase):
             ['<Question: Past question 2.>', '<Question: Past question 1.>']
         )
 
+    def test_no_choice_question(self):
+        """
+        The questions with no choices must not be displayed.
+        """
+
+        create_question(question_text="No choice", days=-30)
+
+        q = create_question(question_text="With choice", days=-30)
+        q.choice_set.create(choice_text='choice')
+
+        response = self.client.get(reverse('polls:index'))
+
+        self.assertQuerysetEqual(
+            response.context['latest_question_list'],
+            ['<Question: With choice>']
+        )
+
 
 class QuestionDetailViewTests(TestCase):
     def test_future_question(self):
@@ -138,6 +155,20 @@ class QuestionDetailViewTests(TestCase):
 
         self.assertContains(response, past_question.question_text)
 
+    def test_no_choice_question(self):
+        """
+        The detail view of a question with no choices
+        returns a 404 not found.
+        """
+
+        q = create_question(question_text="No choice", days=-30)
+
+        url = reverse('polls:detail', args=(q.id, ))
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 404)
+
 class QuestionResultsViewTests(TestCase):
     def test_future_question(self):
         """
@@ -149,7 +180,7 @@ class QuestionResultsViewTests(TestCase):
 
         url = reverse('polls:results', args=(future_question.id,))
         response = self.client.get(url)
-        
+
         self.assertEqual(response.status_code, 404)
 
     def test_past_question(self):
@@ -164,6 +195,20 @@ class QuestionResultsViewTests(TestCase):
         response = self.client.get(url)
 
         self.assertContains(response, past_question.question_text)
+
+    def test_no_choice_question(self):
+        """
+        The results view of a question with no choices
+        returns a 404 not found.
+        """
+
+        q = create_question(question_text="No choice", days=-30)
+
+        url = reverse('polls:results', args=(q.id, ))
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 404)
 
 class QuestionVoteTests(TestCase):
     def test_future_question(self):

@@ -20,7 +20,7 @@ class IndexView(generic.ListView):
         """
         return Question.objects.filter(
             pub_date__lte=timezone.now()
-            ).order_by('-pub_date')[:5]
+            , choice__isnull=False).distinct().order_by('-pub_date')[:5]
 
 class DetailView(generic.DetailView):
     model = Question
@@ -30,7 +30,7 @@ class DetailView(generic.DetailView):
         """
         Excludes any questions that aren't published yet.
         """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        return Question.objects.filter(pub_date__lte=timezone.now(), choice__isnull=False).distinct()
 
 class ResultsView(generic.DetailView):
     model = Question
@@ -40,11 +40,11 @@ class ResultsView(generic.DetailView):
         """
         Excludes any questions that aren't published yet.
         """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        return Question.objects.filter(pub_date__lte=timezone.now(), choice__isnull=False).distinct()
 
 
 def vote(request, question_id):
-    query_set = Question.objects.filter(pub_date__lte=timezone.now())
+    query_set = Question.objects.filter(pub_date__lte=timezone.now(), choice__isnull=False).distinct()
     question = get_object_or_404(query_set, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
